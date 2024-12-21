@@ -1,0 +1,63 @@
+
+# ██╗     ███████╗
+# ██║     ██╔════╝
+# ██║     █████╗
+# ██║     ██╔══╝
+# ███████╗██║
+# ╚══════╝╚═╝
+# Terminal file manager
+# https://github.com/gokcehan/lf
+
+# set hidden
+# set icons
+# set number
+
+# # set preview
+# set relativenumber
+# set shell fish
+
+set hidden
+set icons
+set number
+set promptfmt "\033[34;1m%d\033[0m\033[1m%f\033[0m"
+
+set previewer ~/.config/lf/previewer.sh
+set relativenumber
+set shell bash
+
+# set shellopts '-eu'
+# set ifs "\n"
+# set scrolloff 10
+
+
+## execute current file (must be executable)
+map x $$f
+map X !$f
+
+# # dedicated keys for file opener actions
+map o &mimeopen $f
+map O $mimeopen --ask $f
+#
+# # define a custom 'open' command
+# # This command is called when current file is not a directory. You may want to
+# # use either file extensions and/or mime types here. Below uses an editor for
+# # text files and a file opener for the rest.
+cmd open ${{
+    case $(file --mime-type $f -b) in
+        text/*) lvim $fx;;
+        *) for f in $fx; do setsid $OPENER $f > /dev/null 2> /dev/null & done;;
+    esac
+}}
+
+# cmd open ${
+#     for f in $argv
+#         switch (file --mime-type $f -b)
+#             case "text/*"
+#                 $EDITOR $f
+#             case '*'
+#                 for fx in $f
+#                     setsid $OPENER $fx > /dev/null 2> /dev/null &
+#                 end
+#         end
+#     end
+# }
